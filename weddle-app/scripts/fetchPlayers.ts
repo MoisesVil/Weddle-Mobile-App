@@ -57,10 +57,19 @@ const TEAM_INFO: Record<string, { conference: string; division: string }> = {
   SF:  { conference: 'NFC', division: 'NFC West' },
 };
 
+// Bool to easily switch between offensive skill positions for an
+// easier game, vs a larger set for more variety
+const EASY_MODE = false;
+
 // Positions to include — covers offense, defense, and special teams
-const ALLOWED_POSITIONS = new Set([
-  'QB', 'RB', 'WR', 'TE', 'K',
-  'LB', 'CB', 'S', 'DE', 'DT',
+const ALLOWED_POSITIONS_EASY = new Set([
+  'QB', 'RB', 'WR', 'TE'
+]);
+
+// Positions to include — covers offense, defense, and special teams
+const ALLOWED_POSITIONS_HARD = new Set([
+  'QB', 'RB', 'WR', 'TE', 'OL', 'K',
+  'LB', 'CB', 'S', 'DE', 'DT', 'P'
 ]);
 
 // ---------------------------------------------------------------------------
@@ -97,7 +106,8 @@ async function main() {
     if (p['status'] !== 'Active') { skipped++; continue; }
     if (!p['team'] || !TEAM_INFO[p['team'] as string]) { skipped++; continue; }
     if (!p['full_name']) { skipped++; continue; }
-    if (!ALLOWED_POSITIONS.has(p['position'] as string)) { skipped++; continue; }
+    if (EASY_MODE ? !ALLOWED_POSITIONS_EASY.has(p['position'] as string) :
+                    !ALLOWED_POSITIONS_HARD.has(p['position'] as string)) { skipped++; continue; }
 
     const height = p['height'] ? parseHeight(String(p['height'])) : null;
     const age    = p['age']    ? parseInt(String(p['age']))        : null;
@@ -125,15 +135,16 @@ async function main() {
   // Alphabetical order so autocomplete works naturally
   players.sort((a, b) => a.name.localeCompare(b.name));
 
+  const fileName = EASY_MODE ? 'players_easy.json' : 'players_hard.json';
   const outDir  = join(__dirname, '../data');
-  const outPath = join(outDir, 'players.json');
+  const outPath = join(outDir, fileName);
   mkdirSync(outDir, { recursive: true });
   writeFileSync(outPath, JSON.stringify(players, null, 2));
 
   console.log(`Done!`);
   console.log(`  Included : ${players.length} active players`);
   console.log(`  Skipped  : ${skipped} (inactive / missing data / wrong position)`);
-  console.log(`  Output   : data/players.json`);
+  console.log(`  Output   : data/${fileName}`);
 }
 
 main().catch((err) => {

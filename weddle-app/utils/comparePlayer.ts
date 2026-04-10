@@ -61,7 +61,7 @@ function numericResult(
 
 /**
  * Compares a guessed player against the secret target player and returns
- * colour + direction feedback for every attribute shown in the grid.
+ * color + direction feedback for every attribute shown in the grid.
  *
  * Green  (correct) — exact match
  * Yellow (close)   — same division / conference, or within numeric threshold
