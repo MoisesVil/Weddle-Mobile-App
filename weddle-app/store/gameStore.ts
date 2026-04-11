@@ -8,7 +8,10 @@ import { getDailyPlayer, getTodayKey } from '../utils/dailyPlayer';
 // Constants
 // ---------------------------------------------------------------------------
 
-export const MAX_GUESSES = 8;
+export const MAX_GUESSES_EASY = 8;
+export const MAX_GUESSES_HARD = 10;
+
+export const MAX_GUESSES = MAX_GUESSES_EASY;  // Change to HARD for more challenge!
 
 // ---------------------------------------------------------------------------
 // Types

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
-import playersData from './data/players.json';
+import playersData from './data/players_easy.json';
 import type { Player } from './types/player';
 import { useGameStore, MAX_GUESSES } from './store/gameStore';
 import { GuessRow } from './components/GuessRow';
